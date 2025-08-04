@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vacation</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background-color: #111; color: #fff; }
+    .image-container { max-width: 80%; margin: auto; position: relative; }
+    .main-photo { width: 100%; max-width: 700px; border-radius: 10px; opacity: 0; transition: opacity 0.5s; }
+    .main-photo.show { opacity: 1; }
+    .thumbnails { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
+    .thumbnails img { width: 80px; border-radius: 5px; cursor: pointer; opacity: 0.6; transition: 0.3s; }
+    .thumbnails img.active, .thumbnails img:hover { opacity: 1; border: 2px solid #fff; }
+    .arrow { position: absolute; top: 50%; transform: translateY(-50%); background-color: rgba(255,255,255,0.5); font-size: 30px; padding: 10px; border-radius: 50%; cursor: pointer; }
+    .arrow:hover { background-color: rgba(255,255,255,0.8); }
+    .prev { left: 0; }
+    .next { right: 0; }
+  </style>
+</head>
+<body onkeydown="handleKey(event)">
+  <h1>Vacation</h1>
+  <div class="image-container">
+    <div class="arrow prev" onclick="prevImage()">&#10094;</div>
+    <img id="mainPhoto" class="main-photo" src="images/vacation1.jpg" alt="Vacation">
+    <div class="arrow next" onclick="nextImage()">&#10095;</div>
+  </div>
+  <div class="thumbnails">
+    <img src="images/vacation1.jpg" onclick="showImage(0)" class="active">
+    <img src="images/vacation2.jpg" onclick="showImage(1)">
+    <img src="images/vacation3.jpg" onclick="showImage(2)">
+  </div>
+  <button onclick="window.location.href='gallery.html'">← Back to Gallery</button>
+
+  <script>
+    const images = ["images/vacation1.jpg","images/vacation2.jpg","images/vacation3.jpg"];
+    let current = 0;
+    const mainPhoto = document.getElementById('mainPhoto');
+    const thumbs = document.querySelectorAll('.thumbnails img');
+
+    function showImage(index){
+      current = index;
+      mainPhoto.classList.remove('show');
+      setTimeout(()=>{
+        mainPhoto.src = images[current];
+        mainPhoto.classList.add('show');
+        thumbs.forEach(t=>t.classList.remove('active'));
+        thumbs[current].classList.add('active');
+      },200);
+    }
+    function nextImage(){ showImage((current+1)%images.length); }
+    function prevImage(){ showImage((current-1+images.length)%images.length); }
+    function handleKey(e){
+      if(e.key==="ArrowRight") nextImage();
+      if(e.key==="ArrowLeft") prevImage();
+    }
+    window.onload = ()=> mainPhoto.classList.add('show');
+  </script>
+</body>
+</html>
